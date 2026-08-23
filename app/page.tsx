@@ -9,6 +9,8 @@ import {
   DEFAULT_OPTIONS,
   OPTION_DEFS,
 } from "@/lib/clean";
+import { TopControls, useI18n } from "@/components/site-chrome";
+import Faq from "@/components/faq";
 
 function Switch({
   checked,
@@ -34,6 +36,7 @@ function Switch({
 }
 
 export default function Page() {
+  const { t, d } = useI18n();
   const [text, setText] = useState("");
   const [options, setOptions] = useState<CleanOptions>(DEFAULT_OPTIONS);
   const [result, setResult] = useState<CleanResult | null>(null);
@@ -81,13 +84,17 @@ export default function Page() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "cleaned.txt";
+    a.download = t("downloadName");
     a.click();
     URL.revokeObjectURL(url);
   };
 
   return (
     <>
+      <div className="container">
+        <TopControls />
+      </div>
+
       <header className="site-header">
         <div className="container">
           <a className="wordmark" href="/">
@@ -99,7 +106,7 @@ export default function Page() {
       <main className="container">
         <section className="hero">
           <h1>CleanText</h1>
-          <p>Remove invisible and unwanted characters.</p>
+          <p>{t("subtitle")}</p>
         </section>
 
         <div className="card">
@@ -107,32 +114,36 @@ export default function Page() {
             <>
               <textarea
                 className="text-input"
-                placeholder="Paste text here..."
+                placeholder={t("placeholder")}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 spellCheck={false}
-                aria-label="Text to clean"
+                aria-label={t("inputAria")}
               />
 
               <div className="status" role="status">
                 {text.length === 0 ? null : issueTotal > 0 ? (
                   <span>
-                    {issueTotal} issue{issueTotal === 1 ? "" : "s"} found
+                    {issueTotal === 1
+                      ? t("issuesFoundOne")
+                      : t("issuesFoundMany", { n: issueTotal })}
                   </span>
                 ) : (
                   <>
                     <span className="check">✓</span>
-                    <span>Text looks clean</span>
+                    <span>{t("textClean")}</span>
                   </>
                 )}
               </div>
 
               {issues.length > 0 && (
                 <div className="section">
-                  <p className="section-label">Detected</p>
+                  <p className="section-label">{t("detected")}</p>
                   {issues.map((issue) => (
                     <div className="issue-row" key={issue.key}>
-                      <span className="issue-label">{issue.label}</span>
+                      <span className="issue-label">
+                        {d.issueLabels[issue.key] ?? issue.label}
+                      </span>
                       <span className="issue-count">{issue.count}</span>
                     </div>
                   ))}
@@ -140,19 +151,19 @@ export default function Page() {
               )}
 
               <div className="section">
-                <p className="section-label">Options</p>
+                <p className="section-label">{t("options")}</p>
                 {OPTION_DEFS.map((def) => (
                   <div className="option-row" key={def.key}>
                     <span
                       className="option-label"
                       onClick={() => toggleOption(def.key)}
                     >
-                      {def.label}
+                      {d.optionLabels[def.key] ?? def.label}
                     </span>
                     <Switch
                       checked={options[def.key]}
                       onToggle={() => toggleOption(def.key)}
-                      label={def.label}
+                      label={d.optionLabels[def.key] ?? def.label}
                     />
                   </div>
                 ))}
@@ -165,7 +176,7 @@ export default function Page() {
                   onClick={handleClean}
                   disabled={text.length === 0}
                 >
-                  Clean Text
+                  {t("cleanBtn")}
                 </button>
               </div>
             </>
@@ -173,7 +184,7 @@ export default function Page() {
             <>
               <div className="result-status">
                 <span className="check">✓</span>
-                <span>Text cleaned</span>
+                <span>{t("cleaned")}</span>
               </div>
 
               <textarea
@@ -181,7 +192,7 @@ export default function Page() {
                 value={result.output}
                 readOnly
                 spellCheck={false}
-                aria-label="Cleaned text"
+                aria-label={t("outputAria")}
               />
 
               <div className="actions">
@@ -190,23 +201,23 @@ export default function Page() {
                   className="btn btn-primary"
                   onClick={handleCopy}
                 >
-                  {copied ? "Copied!" : "Copy Clean Text"}
+                  {copied ? t("copied") : t("copy")}
                 </button>
                 <button
                   type="button"
                   className="btn btn-outline"
                   onClick={handleDownload}
                 >
-                  Download .txt
+                  {t("download")}
                 </button>
               </div>
 
               <p className="result-info">
                 {result.total === 0
-                  ? "No changes were needed."
-                  : `${result.total} unwanted character${
-                      result.total === 1 ? "" : "s"
-                    } removed`}
+                  ? t("noChanges")
+                  : result.total === 1
+                    ? t("removedOne")
+                    : t("removedMany", { n: result.total })}
               </p>
 
               {result.removed.length > 0 && (
@@ -218,7 +229,7 @@ export default function Page() {
                     onClick={() => setShowRemoved((v) => !v)}
                   >
                     <span className="chevron">▶</span>
-                    Show removed characters
+                    {t("showRemoved")}
                   </button>
 
                   {showRemoved && (
@@ -226,7 +237,9 @@ export default function Page() {
                       {result.removed.map((r) => (
                         <div className="removed-row" key={r.key}>
                           <span className="removed-code">{r.code}</span>
-                          <span className="removed-name">{r.name}</span>
+                          <span className="removed-name">
+                            {d.charNames[r.name] ?? r.name}
+                          </span>
                           <span className="removed-count">× {r.count}</span>
                         </div>
                       ))}
@@ -241,18 +254,20 @@ export default function Page() {
                   className="btn btn-outline btn-block"
                   onClick={handleReset}
                 >
-                  Clean Another Text
+                  {t("cleanAnother")}
                 </button>
               </div>
             </>
           )}
         </div>
+
+        <Faq />
       </main>
 
       <footer className="site-footer">
         <div className="container">
-          <p className="privacy">Processed locally in your browser.</p>
-          <p className="byline">by WaweUp</p>
+          <p className="privacy">{t("privacy")}</p>
+          <p className="byline">{t("byline")}</p>
         </div>
       </footer>
     </>
