@@ -344,6 +344,24 @@ function SunIcon() {
   );
 }
 
+function PaperPlaneIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#FF6903"
+      strokeWidth="2.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="site-logo__plane"
+    >
+      <path d="m22 2-7 20-4-9-9-4Z" />
+      <path d="M22 2 11 13" />
+    </svg>
+  );
+}
+
 export function TopControls() {
   const { lang, setLang, t } = useI18n();
   const [dark, setDark] = useState(false);
@@ -364,40 +382,55 @@ export function TopControls() {
   };
 
   return (
-    <div className="top-controls">
-      <a className="tc-back" href="https://waweup.com" aria-label={t("backLabel")}>
-        <ArrowLeftIcon />
-        waweup.com
-      </a>
+    <header className="site-header">
+      <div className="site-header__left">
+        <a
+          className="tc-back"
+          href="https://waweup.com"
+          aria-label={t("backLabel")}
+        >
+          <ArrowLeftIcon />
+          <span className="tc-back__label">waweup.com</span>
+        </a>
 
-      <div className="tc-lang" role="group" aria-label="Language">
-        <button
-          type="button"
-          className={lang === "tr" ? "active" : ""}
-          aria-pressed={lang === "tr"}
-          onClick={() => setLang("tr")}
-        >
-          TR
-        </button>
-        <button
-          type="button"
-          className={lang === "en" ? "active" : ""}
-          aria-pressed={lang === "en"}
-          onClick={() => setLang("en")}
-        >
-          EN
-        </button>
+        <div className="tc-lang" role="group" aria-label="Language">
+          <button
+            type="button"
+            className={lang === "tr" ? "active" : ""}
+            aria-pressed={lang === "tr"}
+            onClick={() => setLang("tr")}
+          >
+            TR
+          </button>
+          <button
+            type="button"
+            className={lang === "en" ? "active" : ""}
+            aria-pressed={lang === "en"}
+            onClick={() => setLang("en")}
+          >
+            EN
+          </button>
+        </div>
       </div>
 
-      <button
-        type="button"
-        className="tc-theme"
-        onClick={toggleTheme}
-        aria-label={dark ? t("themeToLight") : t("themeToDark")}
-        title={dark ? t("themeToLight") : t("themeToDark")}
-      >
-        {dark ? <SunIcon /> : <MoonIcon />}
-      </button>
-    </div>
+      <div className="site-header__center">
+        <a className="site-logo" href="/" aria-label="waweup home">
+          <span className="site-logo__text">wave</span>
+          <PaperPlaneIcon />
+        </a>
+      </div>
+
+      <div className="site-header__right">
+        <button
+          type="button"
+          className="tc-theme"
+          onClick={toggleTheme}
+          aria-label={dark ? t("themeToLight") : t("themeToDark")}
+          title={dark ? t("themeToLight") : t("themeToDark")}
+        >
+          {dark ? <SunIcon /> : <MoonIcon />}
+        </button>
+      </div>
+    </header>
   );
 }

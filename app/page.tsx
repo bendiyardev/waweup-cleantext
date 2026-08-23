@@ -91,17 +91,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="container">
-        <TopControls />
-      </div>
-
-      <header className="site-header">
-        <div className="container">
-          <a className="wordmark" href="/">
-            waweup.
-          </a>
-        </div>
-      </header>
+      <TopControls />
 
       <main className="container">
         <section className="hero">

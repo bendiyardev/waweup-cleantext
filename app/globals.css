@@ -64,15 +64,51 @@ body {
 /* ---------- Header ---------- */
 
 .site-header {
-  padding-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
 }
 
-.wordmark {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--primary);
+.site-header__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.site-header__center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.site-header__right {
+  display: flex;
+  align-items: center;
+}
+
+/* ---------- Logo ---------- */
+
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 1.125rem;
   text-decoration: none;
+  color: var(--primary);
+}
+
+.site-logo__text {
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--primary);
+}
+
+.site-logo__plane {
+  width: 0.85em;
+  height: 0.85em;
+  transform: translateY(-1px) rotate(-12deg);
 }
 
 /* ---------- Hero ---------- */
@@ -397,14 +433,6 @@ body {
 
 /* ---------- Top controls ---------- */
 
-.top-controls {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  padding-top: 20px;
-}
-
 .tc-back {
   display: inline-flex;
   align-items: center;
@@ -481,6 +509,17 @@ body {
 .tc-theme:focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
+}
+
+/* Collapse the back link to just the arrow on the smallest screens. */
+@media (max-width: 480px) {
+  .tc-back {
+    padding: 0 9px;
+  }
+
+  .tc-back__label {
+    display: none;
+  }
 }
 
 /* ---------- FAQ ---------- */
