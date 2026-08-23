@@ -415,7 +415,7 @@ export function TopControls() {
 
       <div className="site-header__center">
         <a className="site-logo" href="/" aria-label="waweup home">
-          <span className="site-logo__text">wave</span>
+          <span className="site-logo__text">wawe</span>
           <PaperPlaneIcon />
         </a>
       </div>
